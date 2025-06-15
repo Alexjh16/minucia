@@ -152,8 +152,6 @@ const updatePieza = () => {
                                         </p>
                                         <InputError :message="form.errors.descripcion" class="mt-2" />
                                     </div>
-                                    <!--error que puede retonar el servidor-->
-                                    <InputError :message="form.errors" class="mt-2" />
                                 </div>
                             </div>
                             <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">

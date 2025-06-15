@@ -50,13 +50,14 @@ function formatFecha(fecha) {
 
                 <div class="flex flex-col justify-between sm:flex-row mt-6">
                     <div class="relative text-sm text-gray-800 col-span-3">
-                        <div
+                        <!--<div
                             class="absolute pl-2 left-0 top-0 bottom-0 flex items-center pointer-events-none text-gray-500">
                             <MagnifyingGlass />
                         </div>
+                        -->
 
-                        <input type="text" autocomplete="off" placeholder="Buscar piezas" id="search"
-                            class="block rounded-lg border-0 py-2 pl-10 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />
+                        <!--<input type="text" autocomplete="off" placeholder="Buscar piezas" id="search"
+                            class="block rounded-lg border-0 py-2 pl-10 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" />-->
                     </div>
                 </div>
 
@@ -144,11 +145,11 @@ function formatFecha(fecha) {
                                                     class="text-indigo-600 hover:text-indigo-900">
                                                     <EditIcon />
                                                 </Link>
-                                                <Link 
+                                                <!--<Link 
                                                 :href="route('piezas.destroy', pieza.id)"
                                                     class="text-red-600 hover:text-red-900">
                                                     <RemoveIcon />
-                                                </Link>
+                                                </Link>-->
                                             </td>
                                         </tr>
                                     </tbody>

@@ -6,6 +6,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
+const flash = usePage().props.flash ?? {};
 
 defineProps({
     canResetPassword: {
@@ -67,6 +69,11 @@ const submit = () => {
                 />
 
                 <InputError class="mt-2" :message="form.errors.password" />
+            </div>
+            <div>
+                <div v-if="flash.message" class="text-red-600 mb-4">
+                {{ flash.message }}
+                </div>
             </div>
 
             <div class="block mt-4">
