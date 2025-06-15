@@ -42,4 +42,15 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    //modelos eloquent
+
+    public function piezas()
+    {
+        return $this->hasMany(Pieza::class);
+    }
+    public function proveedores()
+    {
+        return $this->hasMany(Proveedor::class);
+    }
 }
