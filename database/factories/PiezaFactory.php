@@ -20,7 +20,8 @@ class PiezaFactory extends Factory
             'codigo' => $this->faker->unique()->numerify('PZ-#####'),
             'nombre' => $this->faker->word,
             'descripcion' => $this->faker->sentence,
-            'precio' => $this->faker->randomFloat(2, 10, 1000),
+            //precio cerrado sin decimales
+            'precio' => $this->faker->numberBetween(50, 10000),
             'cantidad' => $this->faker->numberBetween(1, 100),
             'marca' => $this->faker->company,
             'modelo' => $this->faker->word,

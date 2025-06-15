@@ -2,10 +2,14 @@
 import MagnifyingGlass from '@/Components/Icons/MagnifyingGlass.vue';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import RemoveIcon from '@/Components/Icons/RemoveIcon.vue';
+import Pagination from '@/Components/Icons/Pagination.vue';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head, Link } from '@inertiajs/vue3';
 //definir las propiedades que se recibirán desde Laravel
 const props = defineProps({
     piezas: Object
 });
+
 function formatFecha(fecha) {
   if (!fecha) return '';
   const d = new Date(fecha);
@@ -15,12 +19,13 @@ function formatFecha(fecha) {
   return `${dia}/${mes}/${anio}`;
 }
 
-function formatPrecio(precio) {
-  if (precio == null) return '';
-  return Number(precio).toLocaleString('es-ES', { style: 'currency', currency: 'USD' });
-}
+
 </script>
 <template>
+    <Head title="Dashboard" />
+
+    <AuthenticatedLayout>
+        
     <div class="bg-gray-100 py-10">
         <div class="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8">
             <div class="px-4 sm:px-6 lg:px-8">
@@ -35,10 +40,11 @@ function formatPrecio(precio) {
                     </div>
 
                     <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-                        <a href="#"
+                        <Link 
+                            :href="route('piezas.create')"
                             class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
                             Agregar Pieza
-                        </a>
+                        </Link>
                     </div>
                 </div>
 
@@ -118,7 +124,7 @@ function formatPrecio(precio) {
                                                 {{ pieza.descripcion }}
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                                {{ formatPrecio(pieza.precio) }}
+                                               $ {{ pieza.precio }} USD
                                             </td>
                                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                                 {{ pieza.cantidad }}
@@ -133,24 +139,30 @@ function formatPrecio(precio) {
                                                 {{ formatFecha(pieza.created_at) }}
                                             </td>
                                             <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 flex justify-end space-x-4">
-                                                <a href="#"
+                                                <Link 
+                                                :href="route('piezas.edit', pieza.id)"
                                                     class="text-indigo-600 hover:text-indigo-900">
                                                     <EditIcon />
-                                                </a>
-                                                <a href="#"
+                                                </Link>
+                                                <Link 
+                                                :href="route('piezas.destroy', pieza.id)"
                                                     class="text-red-600 hover:text-red-900">
                                                     <RemoveIcon />
-                                                </a>
+                                                </Link>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
-                            <div>Pagination Links</div>
                         </div>
                     </div>
+                    
                 </div>
+                
             </div>
+            
+        <Pagination :piezas="piezas" />
         </div>
     </div>
+    </AuthenticatedLayout>
 </template>

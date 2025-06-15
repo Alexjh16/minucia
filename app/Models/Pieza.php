@@ -20,7 +20,6 @@ class Pieza extends Model
         'user_id',
     ];
     protected $casts = [
-        'precio' => 'decimal:2',
         'cantidad' => 'integer',
     ];
 

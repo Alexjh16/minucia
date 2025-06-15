@@ -19,6 +19,7 @@ class PiezaResource extends JsonResource
             'codigo' => $this->codigo,
             'nombre' => $this->nombre,
             'descripcion' => $this->descripcion,
+            // Formatear el precio a dos decimales
             'precio' => $this->precio,
             'cantidad' => $this->cantidad,
             'marca' => $this->marca,

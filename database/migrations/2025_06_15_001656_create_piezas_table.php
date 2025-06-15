@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('codigo', 50)->unique();
             $table->string('nombre', 100);
             $table->text('descripcion')->nullable();
-            $table->decimal('precio', 10, 2)->default(0.00);
+            $table->string('precio')->default(0);
             $table->integer('cantidad')->default(0);
             $table->string('marca', 50)->nullable();
             $table->string('modelo', 50)->nullable();
