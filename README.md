@@ -1,66 +1,123 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Documentación de Modelos y Relaciones — Proyecto Minucia
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Modelos Principales
 
-## About Laravel
+El sistema está basado en tres modelos principales:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **User** (Usuario)
+- **Proveedor** (Proveedor)
+- **Pieza** (Componente/Parte)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Relaciones entre Modelos
 
-## Learning Laravel
+### 1. User (Usuario)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- **Relación con Pieza:**  
+  Un usuario puede registrar muchas piezas (`hasMany`).  
+  ```php
+  public function piezas()
+  {
+      return $this->hasMany(Pieza::class);
+  }
+  ```
+- **Relación con Proveedor:**  
+  Un usuario puede registrar muchos proveedores (`hasMany`).  
+  ```php
+  public function proveedores()
+  {
+      return $this->hasMany(Proveedor::class);
+  }
+  ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+**Justificación:**  
+Esto permite auditar y asociar cada pieza y proveedor con el usuario que la registró, facilitando la trazabilidad y la gestión multiusuario.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+### 2. Proveedor
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- **Relación con User:**  
+  Cada proveedor es registrado por un usuario (`belongsTo`).  
+  ```php
+  public function user()
+  {
+      return $this->belongsTo(User::class);
+  }
+  ```
 
-### Premium Partners
+**Justificación:**  
+Permite saber qué usuario creó cada proveedor, útil para permisos, auditoría y gestión de datos.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+---
 
-## Contributing
+### 3. Pieza
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- **Relación con Proveedor:**  
+  Cada pieza pertenece a un proveedor (`belongsTo`).  
+  ```php
+  public function proveedor()
+  {
+      return $this->belongsTo(Proveedor::class);
+  }
+  ```
+- **Relación con User:**  
+  Cada pieza es registrada por un usuario (`belongsTo`).  
+  ```php
+  public function user()
+  {
+      return $this->belongsTo(User::class);
+  }
+  ```
 
-## Code of Conduct
+**Justificación:**  
+Esto permite asociar cada pieza tanto con el proveedor que la suministra como con el usuario que la registró, lo que es fundamental para la trazabilidad y la gestión de inventario.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## Otras Decisiones de Diseño
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- **$fillable:**  
+  Se definen los campos que pueden ser asignados masivamente para proteger contra asignación masiva no deseada.
+- **$casts:**  
+  Se usan para asegurar que ciertos campos (como `cantidad`) siempre sean tratados como enteros.
+- **$with:**  
+  En el modelo `Pieza`, se cargan automáticamente las relaciones `proveedor` y `user` para optimizar las consultas y evitar el problema N+1.
+- **Scopes personalizados:**  
+  El scope `search` en `Pieza` permite búsquedas flexibles por código, nombre o descripción.
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Ventajas de esta Estructura
+
+- **Escalabilidad:**  
+  Permite agregar fácilmente más relaciones (por ejemplo, categorías, ubicaciones, etc.).
+- **Seguridad:**  
+  El uso de `$fillable` y relaciones bien definidas protege la integridad de los datos.
+- **Trazabilidad:**  
+  Siempre se puede saber quién creó o modificó cada registro.
+- **Facilidad de uso:**  
+  Las relaciones Eloquent simplifican las consultas y la manipulación de datos.
+
+---
+
+## Ejemplo de Uso
+
+Obtener todas las piezas de un usuario:
+```php
+$user = User::find(1);
+$piezas = $user->piezas;
+```
+
+Obtener el proveedor de una pieza:
+```php
+$pieza = Pieza::find(1);
+$proveedor = $pieza->proveedor;
+```
+
+---
+
+## Conclusión
+
+La estructura de modelos y relaciones está pensada de manera sencilla.
