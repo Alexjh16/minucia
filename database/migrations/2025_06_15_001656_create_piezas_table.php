@@ -21,7 +21,13 @@ return new class extends Migration
             $table->string('marca', 50)->nullable();
             $table->string('modelo', 50)->nullable();
 
+            //nuevos campos
+            $table->integer('peso_teorico')->default(0);
+            $table->integer('peso_real')->default(0);
+            $table->foreignId('bloque_id')->constrained('bloques')->onDelete('cascade');
+
             $table->foreignId('proveedor_id')->constrained('proveedores')->onDelete('cascade');
+            
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             
             $table->timestamps();

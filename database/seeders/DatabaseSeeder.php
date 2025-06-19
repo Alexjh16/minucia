@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Bloque;
+use App\Models\Proyecto;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -15,7 +18,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             ProveedorSeeder::class,
-            PiezaSeeder::class,            
+            PiezaSeeder::class,   
+            ProyectoSeeder::class,
+            BloqueSeeder::class,         
         ]);
         \App\Models\User::factory(10)->create();
 

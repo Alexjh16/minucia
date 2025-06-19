@@ -33,6 +33,10 @@ class Pieza extends Model
     {
         return $this->belongsTo(Proveedor::class);
     }
+
+    public function bloque(){
+        return $this->belongsTo(Bloque::class);
+    }
     public function user()
     {
         return $this->belongsTo(User::class);
