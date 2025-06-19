@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Bloque;
 use Illuminate\Http\Request;
+use App\Http\Resources\BloquesResource;
 
 class BloqueController extends Controller
 {
@@ -12,7 +13,10 @@ class BloqueController extends Controller
      */
     public function index()
     {
-        //
+        $bloques = BloquesResource::collection(Bloque::paginate(7));
+        return inertia('Bloques/Index', [
+            'bloques' => $bloques,
+        ]);
     }
 
     /**

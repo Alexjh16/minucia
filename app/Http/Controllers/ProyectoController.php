@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProyectoRequest;
+use App\Http\Resources\ProyectoResource;
 use App\Models\Proyecto;
+use DragonCode\Contracts\Cache\Store;
 use Illuminate\Http\Request;
 
 class ProyectoController extends Controller
@@ -12,7 +15,11 @@ class ProyectoController extends Controller
      */
     public function index()
     {
-        //
+        //listar los proyectos con estado activo
+        $proyectos = ProyectoResource::collection(Proyecto::where('estado', 'activo')->paginate(7));
+        return inertia('Proyectos/Index',[
+            'proyectos' => $proyectos,
+        ]);
     }
 
     /**
@@ -20,15 +27,18 @@ class ProyectoController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('Proyectos/Create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProyectoRequest $request)
     {
-        //
+        $proyecto = $request->validated();
+
+        Proyecto::create($proyecto);
+        return redirect()->route('proyectos.index')->with('success', 'Proyecto creado correctamente');
     }
 
     /**
@@ -60,6 +70,9 @@ class ProyectoController extends Controller
      */
     public function destroy(Proyecto $proyecto)
     {
-        //
+        //no eliminamos, mantenemos el registro para el tema de graficos y analiticas
+        $proyecto->estado = 'eliminado';
+        $proyecto->save();
+        return redirect()->route('proyectos.index')->with('success', 'Proyecto eliminado correctamente');
     }
 }

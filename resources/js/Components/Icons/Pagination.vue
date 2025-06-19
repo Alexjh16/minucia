@@ -2,14 +2,20 @@
 import { usePage } from '@inertiajs/inertia-vue3';
 import { router } from '@inertiajs/vue3'
 
+//recibe la data para hacer la respectiva paginación
 const props = defineProps({
-    piezas: Object
+    data: Object,
 });
+//obtener la url retornda
+const fullUrl = props.data.meta.path;
+const splitUrl = fullUrl.split('/');
 
+const visitPage = splitUrl[3];
 
 const updatePageNummber = (link) => {
     let pageNumber = link.url.split("=")[1];
-    router.visit('piezas?page=' + pageNumber, {
+    console.log(pageNumber);
+    router.visit(visitPage + '?page=' + pageNumber, {
         preserveState: true,
         preserveScroll: true,
     });
@@ -28,15 +34,15 @@ const updatePageNummber = (link) => {
                             <p class="text-sm text-gray-700">
                                 Showing
                                 <!-- space -->
-                                <span class="font-medium">{{ props.piezas.meta.from }}</span>
+                                <span class="font-medium">{{ props.data.meta.from }}</span>
                                 <!-- space -->
                                 to
                                 <!-- space -->
-                                <span class="font-medium">{{ props.piezas.meta.to }}</span>
+                                <span class="font-medium">{{ props.data.meta.to }}</span>
                                 <!-- space -->
                                 of
                                 <!-- space -->
-                                <span class="font-medium">{{ props.piezas.meta.total }}</span>
+                                <span class="font-medium">{{ props.data.meta.total }}</span>
                                 <!-- space -->
                                 results
                             </p>
@@ -47,7 +53,7 @@ const updatePageNummber = (link) => {
                                 <button
                                 @click.prevent="updatePageNummber(link)"
                                 :disabled="link.active || !link.url"
-                                v-for="(link, index) in props.piezas.meta.links"
+                                v-for="(link, index) in props.data.meta.links"
                                  :key="index" 
                                  class="relative inline-flex items-center px-4 py-2 border text-sm font-medium"
                                     :class="{

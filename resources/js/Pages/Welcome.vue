@@ -35,9 +35,9 @@ defineProps({
               <span class="ml-2 text-xl font-semibold text-gray-900">Minucia App</span>
             </div>
           </div>
-          <div v-if="canLogin" class="sm:fixed z-10 sm:top-0 sm:right-0 p-6 text-end">
+          <div v-if="canLogin" class=" z-10 sm:top-0 sm:right-0 p-4 text-end">
             <Link v-if="$page.props.auth.user" :href="route('dashboard')"
-              class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">
+              class="ml-2 text-xl font-semibold text-blue-600">
             Dashboard</Link>
             <template v-else>
               <div class="flex items-center space-x-4">
@@ -52,6 +52,7 @@ defineProps({
             </template>
           </div>
         </div>
+      </div>
     </nav>
 
     <!-- Hero Section with Ship Image -->

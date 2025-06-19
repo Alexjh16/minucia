@@ -162,7 +162,7 @@ function formatFecha(fecha) {
                 
             </div>
             
-        <Pagination :piezas="piezas" />
+        <Pagination :data="piezas" />
         </div>
     </div>
     </AuthenticatedLayout>

@@ -29,8 +29,14 @@ const showingNavigationDropdown = ref(false);
 
                             <!-- Navigation Links -->
                             <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('piezas.index')" :active="route().current('dashboard')">
-                                    Minucia App
+                                <NavLink :href="route('piezas.index')" :active="route().current('piezas.index')">
+                                    Registro de piezas
+                                </NavLink>
+                                <NavLink :href="route('proyectos.index')" :active="route().current('proyectos.*')">
+                                    Proyectos
+                                </NavLink>
+                                <NavLink :href="route('bloques.index')" :active="route().current('bloques.*')">
+                                    Bloques
                                 </NavLink>
                             </div>
                         </div>

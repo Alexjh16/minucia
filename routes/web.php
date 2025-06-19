@@ -5,6 +5,9 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\PiezaController;
+use App\Http\Controllers\ProyectoController;
+use App\Http\Controllers\BloqueController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,6 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('piezas', PiezaController::class);
+    Route::resource('proyectos', ProyectoController::class);
+    Route::resource('bloques', BloqueController::class);
 });
 
 require __DIR__.'/auth.php';
