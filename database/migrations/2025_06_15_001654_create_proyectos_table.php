@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('proyectos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre');
-            $table->string('codigo')->unique();
+            $table->string('codigo')->unique(); // Unique constraint for project code
+            $table->string('nombre');            
             $table->timestamps();
         });
     }

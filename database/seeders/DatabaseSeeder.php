@@ -19,8 +19,8 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             ProveedorSeeder::class,
             PiezaSeeder::class,   
-            ProyectoSeeder::class,
-            BloqueSeeder::class,         
+            BloqueSeeder::class,  
+            
         ]);
         \App\Models\User::factory(10)->create();
 

@@ -29,6 +29,11 @@ class PiezaFactory extends Factory
             'user_id' => \App\Models\User::factory()->create()->id,
             'created_at' => now(),
             'updated_at' => now(),
+
+            //nuevos campos
+            'peso_teorico' => $this->faker->numberBetween(1, 100),
+            'peso_real' => $this->faker->numberBetween(1, 100),
+            'bloque_id' => \App\Models\Bloque::factory()->create()->id,
         ];
     }
 }

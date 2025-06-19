@@ -16,8 +16,23 @@ class ProyectoFactory extends Factory
      */
     public function definition(): array
     {
+        $fakeData = [
+            'CodProyecto' => [
+                'BICM',
+                'BALC',
+                'OPV',
+                'BRF',
+            ],
+            'NombreProyecto' => [
+                'Oceanografico',
+                'Buque DA',
+                'Offshore',
+                'Recfluvial',
+            ]
+        ];
         return [
-            //
+            'codigo' => $this->faker->unique()->randomElement($fakeData['CodProyecto']),
+            'nombre' => $this->faker->randomElement($fakeData['NombreProyecto']),
         ];
     }
 }

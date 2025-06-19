@@ -13,23 +13,25 @@ return new class extends Migration
     {
         Schema::create('piezas', function (Blueprint $table) {
             $table->id();
-            $table->string('codigo', 50)->unique();
-            $table->string('nombre', 100);
+            $table->string('codigo', 50)->unique();          
+
+            //nuevos campos
+            $table->string('pieza');
+            $table->integer('peso_teorico')->default(0);
+            $table->integer('peso_real')->default(0);
+            $table->string('estado')->default('Pendiente');
+            $table->foreignId('bloque_id')->constrained('bloques')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+
+            //remover
+            $table->foreignId('proveedor_id')->constrained('proveedores')->onDelete('cascade');
+            $table->string('nombre', 100);            
             $table->text('descripcion')->nullable();
             $table->string('precio')->default(0);
             $table->integer('cantidad')->default(0);
             $table->string('marca', 50)->nullable();
             $table->string('modelo', 50)->nullable();
 
-            //nuevos campos
-            $table->integer('peso_teorico')->default(0);
-            $table->integer('peso_real')->default(0);
-            $table->foreignId('bloque_id')->constrained('bloques')->onDelete('cascade');
-
-            $table->foreignId('proveedor_id')->constrained('proveedores')->onDelete('cascade');
-            
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            
             $table->timestamps();
         });
     }

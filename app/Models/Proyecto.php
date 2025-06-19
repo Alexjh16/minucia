@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Proyecto extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'codigo',
+        'nombre',
+    ];
+
+    public function bloques()
+    {
+        return $this->hasMany(Bloque::class);
+    }
 }

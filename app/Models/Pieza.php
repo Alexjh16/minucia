@@ -17,6 +17,7 @@ class Pieza extends Model
         'marca',
         'modelo',
         'proveedor_id',
+        'proyecto_id',
         'user_id',
     ];
     protected $casts = [
@@ -28,7 +29,7 @@ class Pieza extends Model
         'user',
     ];
 
-    //modelos eloquent
+    //remover 
     public function proveedor()
     {
         return $this->belongsTo(Proveedor::class);
@@ -37,14 +38,9 @@ class Pieza extends Model
     public function bloque(){
         return $this->belongsTo(Bloque::class);
     }
+
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-    public function scopeSearch($query, $search)
-    {
-        return $query->where('codigo', 'like', "%{$search}%")
-                     ->orWhere('nombre', 'like', "%{$search}%")
-                     ->orWhere('descripcion', 'like', "%{$search}%");
     }
 }

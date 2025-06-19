@@ -9,7 +9,17 @@ class Bloque extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'codigo',
+        'nombre',
+        'proyecto_id',
+    ];
+
     public function proyecto(){
         return $this->belongsTo(Proyecto::class);
+    }
+    public function piezas()
+    {
+        return $this->hasMany(Pieza::class);
     }
 }
