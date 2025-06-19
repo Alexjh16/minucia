@@ -7,6 +7,7 @@ use App\Http\Resources\ProyectoResource;
 use App\Models\Proyecto;
 use DragonCode\Contracts\Cache\Store;
 use Illuminate\Http\Request;
+use App\Http\Requests\UpdateProyectoRequest;
 
 class ProyectoController extends Controller
 {
@@ -54,15 +55,20 @@ class ProyectoController extends Controller
      */
     public function edit(Proyecto $proyecto)
     {
-        //
+        //obtenemos los proveedores
+        $proyecto = ProyectoResource::make($proyecto);
+        return inertia('Proyectos/Edit', [
+            'proyecto' => $proyecto,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Proyecto $proyecto)
+    public function update(UpdateProyectoRequest $request, Proyecto $proyecto)
     {
-        //
+        $proyecto->update($request->validated());
+        return redirect()->route('proyectos.index')->with('success', 'Proyecto actualizado correctamente');
     }
 
     /**
