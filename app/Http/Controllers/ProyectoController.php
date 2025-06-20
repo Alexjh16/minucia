@@ -76,9 +76,7 @@ class ProyectoController extends Controller
      */
     public function destroy(Proyecto $proyecto)
     {
-        //no eliminamos, mantenemos el registro para el tema de graficos y analiticas
-        $proyecto->estado = 'eliminado';
-        $proyecto->save();
+        $proyecto->delete();
         return redirect()->route('proyectos.index')->with('success', 'Proyecto eliminado correctamente');
     }
 }

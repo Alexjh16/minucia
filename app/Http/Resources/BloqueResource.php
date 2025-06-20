@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class BloquesResource extends JsonResource
+class BloqueResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,7 +18,11 @@ class BloquesResource extends JsonResource
             'id' => $this->id,
             'codigo' => $this->codigo,
             'nombre' => $this->nombre,
-            'proyecto_id' => $this->proyecto_id,
+            'proyecto' => [
+                'id' => $this->proyecto->id,
+                'codigo' => $this->proyecto->codigo,
+                'nombre' => $this->proyecto->nombre,
+            ],
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

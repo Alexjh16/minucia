@@ -4,23 +4,21 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import RemoveIcon from '@/Components/Icons/RemoveIcon.vue';
 import EditIcon from '@/Components/Icons/EditIcon.vue';
 import { Head, Link } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 import { Inertia } from '@inertiajs/inertia';
 const props = defineProps({
     proyectos: Object
 });
 
 
-const destroyProyecto = (id) => {
+const destroyProyecto = async (id) => {
     if (confirm('¿Estás seguro de que deseas eliminar este proyecto?')) {
-        Inertia.delete(route('proyectos.destroy', id), {
-            onSuccess: () => {
-                // Aquí puedes manejar la respuesta después de eliminar el proyecto
-                console.log('Proyecto eliminado con éxito');
-            },
-            onError: (error) => {
-                // Manejo de errores
-                console.error('Error al eliminar el proyecto:', error);
-            }
+        router.delete(route('proyectos.destroy', id))
+        .then(() => {
+            router.visit(route('proyectos.index'));
+        })
+        .catch(error => {
+            console.error('Error:', error);
         });
     }
 };
