@@ -55,7 +55,6 @@ class ProyectoController extends Controller
      */
     public function edit(Proyecto $proyecto)
     {
-        //obtenemos los proveedores
         $proyecto = ProyectoResource::make($proyecto);
         return inertia('Proyectos/Edit', [
             'proyecto' => $proyecto,

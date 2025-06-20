@@ -50,8 +50,5 @@ class User extends Authenticatable
     {
         return $this->hasMany(Pieza::class);
     }
-    public function proveedores()
-    {
-        return $this->hasMany(Proveedor::class);
-    }
+
 }

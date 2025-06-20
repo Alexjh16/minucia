@@ -3,22 +3,32 @@ import { ref, watch } from 'vue'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import InputError from '@/Components/InputError.vue';
+import axios from 'axios';
 
 const props = defineProps({
-    proveedores: Object
+    proyectos: Object, 
 });
+
+let bloques = ref([]);
 
 const form = useForm({
-    nombre: '',
-    codigo: '',
-    marca: '',
-    proveedor_id: '',
-    cantidad: 1,
-    precio: '',
-    descripcion: ''
+    pieza: '',
+    peso_teorico: '',
+    estado: 'Pendiente',
+    proyecto_id: '',
+    bloque_id: '',
 });
 
+watch(() => form.proyecto_id, (newValue) => {
+   getBloques(newValue);
+});
 
+const getBloques = (proyectoId) => {
+    axios.get('/api/bloques?proyecto_id=' + proyectoId)
+        .then((response) => {
+            bloques.value = response.data;
+        })
+}
 const createPieza = () => {
     form.post(route('piezas.store'));
 };
@@ -43,54 +53,56 @@ const createPieza = () => {
                                         Información de la Pieza
                                     </h3>
                                     <p class="mt-1 text-sm text-gray-500">
-                                        Complete los campos a continuación para registrar una nueva pieza.
+                                        Complete los campos necesarios para actualizar la Información de la Pieza.
                                     </p>
                                 </div>
 
                                 <div class="grid grid-cols-6 gap-6">
                                     <div class="col-span-6 sm:col-span-3">
-                                        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+                                        <label for="pieza" class="block text-sm font-medium text-gray-700">Pieza</label>
                                         <input 
-                                        v-model="form.nombre"
-                                        autocomplete="nombre"
-                                        type="text" id="nombre"
+                                        v-model="form.pieza"
+                                        autocomplete="pieza"
+                                        placeholder="B01"
+                                        type="text" id="pieza"
                                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
-                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.nombre }"
+                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.pieza }"
                                             />
 
-                                    <InputError :message="form.errors.nombre" class="mt-2" />
+                                    <InputError :message="form.errors.pieza" class="mt-2" />
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-3">
-                                        <label for="codigo" class="block text-sm font-medium text-gray-700">Código</label>
+                                        <label for="codigo" class="block text-sm font-medium text-gray-700">Peso Teórico</label>
                                         <input 
-                                        placeholder="PZ-XXXX"
-                                        v-model="form.codigo"
-                                        type="text" id="codigo" autocomplete="codigo"
+                                        placeholder="0.00"
+                                        v-model="form.peso_teorico"
+                                        type="float" id="codigo" autocomplete="codigo"
                                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm "
-                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.codigo }" />
+                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.peso_teorico }" />
 
-                                        <InputError :message="form.errors.codigo" class="mt-2" />
+                                        <InputError :message="form.errors.peso_teorico" class="mt-2" />
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-3">
                                         <label
-                                            for="marca"
+                                            for="proyecto_id"
                                             class="block text-sm font-medium text-gray-700"
-                                            >Marca</label
+                                            >Proyecto</label
                                         >
                                         <select
-                                            v-model="form.marca"
-                                            id="marca"
+                                            v-model="form.proyecto_id"
+                                            id="proyecto_id"
                                             class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.marca }"
+                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.proyecto_id }"
                                         >
                                             <option value="">
-                                                Seleccionar una Marca
+                                                Seleccionar un Proyecto
                                             </option>
-                                            <option value="Marca A">Marca A</option>
-                                            <option value="Marca B">Marca B</option>
-                                            <option value="Marca C">Marca C</option>
+                                            <option v-for="proyecto in props.proyectos.data" :key="proyecto.id" :value="proyecto.id">
+                                                {{ proyecto.codigo }} - {{ proyecto.nombre }}
+                                            </option>
+                                            
                                         </select>
                                         <InputError :message="form.errors.marca" class="mt-2" />
                                     </div>
@@ -98,56 +110,22 @@ const createPieza = () => {
                                     
 
                                     <div class="col-span-6 sm:col-span-3">
-                                        <label for="proveedor_id"
-                                            class="block text-sm font-medium text-gray-700">Proveedor</label>
-                                        <select id="proveedor_id"
-                                            v-model="form.proveedor_id"
+                                        <label for="bloque_id"
+                                            class="block text-sm font-medium text-gray-700">Bloque</label>
+                                        <select id="bloque_id"
+                                            v-model="form.bloque_id"
                                             class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.proveedor_id }">
+                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.bloque_id }">
                                             <option value="">
-                                                Selecciona un Proveedor
+                                                Selecciona un Bloque
                                             </option>
-                                            <option v-for="proveedor in props.proveedores.data" :key="proveedor.id" :value="proveedor.id">
-                                                {{ proveedor.nombre }}
+                                            <option v-for="bloque in bloques.data" :key="bloque.id" :value="bloque.id">
+                                                {{ bloque.nombre }}
                                             </option>
                                         </select>
-                                        <InputError :message="form.errors.proveedor_id" class="mt-2" />
+                                        <InputError :message="form.errors.bloque_id" class="mt-2" />
                                     </div>
 
-                                    <!-- cantidad -->
-                                    <div class="col-span-6 sm:col-span-3">
-                                        <label for="cantidad" class="block text-sm font-medium text-gray-700">Cantidad</label>
-                                        <input 
-                                            type="number" id="cantidad" min="1"
-                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.cantidad }"
-                                            v-model="form.cantidad" />
-
-                                        <InputError :message="form.errors.cantidad" class="mt-2" />
-                                    </div>
-                                    
-
-                                    <div class="col-span-6 sm:col-span-3">
-                                        <label for="precio" class="block text-sm font-medium text-gray-700">Precio</label>
-                                        <input
-                                        placeholder="$0.00"
-                                         type="text" id="precio" autocomplete="precio"
-                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                            v-model="form.precio" />
-                                        <InputError :message="form.errors.precio" class="mt-2" />
-                                    </div>
-                                    <div class="col-span-6 sm:col-span-3">
-                                        <label for="descripcion" class="block text-sm font-medium text-gray-700">Descripción</label>
-                                        <textarea id="descripcion" rows="3"
-                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.descripcion }"
-                                            v-model="form.descripcion"
-                                            @error="form.errors.descripcion = $message"></textarea>
-                                        <p class="mt-2 text-sm text-gray-500">
-                                            Proporcione una descripción detallada de la pieza.
-                                        </p>
-                                        <InputError :message="form.errors.descripcion" class="mt-2" />
-                                    </div>
                                     <!--error o errores que puede retonar el servidor-->
                                     <!--<InputError :message="form.errors" class="mt-2" />-->
                                 </div>

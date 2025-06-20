@@ -5,27 +5,31 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Pieza; 
 use App\Http\Resources\PiezaResource;
-use App\Models\Proveedor;
-use App\Http\Resources\ProveedorResource;
+use App\Http\Resources\BloqueResource;
+use App\Models\Bloque;
 use App\Http\Requests\StorePiezaRequest;
 use App\Http\Requests\UpdatePiezaRequest;
+use App\Models\Proyecto;
+use App\Http\Resources\ProyectoResource;
 
 
 class PiezaController extends Controller
 {
 
     public function index(){
-        $piezas = PiezaResource::collection(Pieza::paginate(7));
+      $piezas = PiezaResource::collection(Pieza::paginate(7));
        return inertia('Piezas/Index', [
             'piezas' => $piezas,
        ]);
     }
 
     public function create(){
-       //proveedores orderna por nombre ascendente
-       $proveedores = ProveedorResource::collection(Proveedor::orderBy('nombre', 'asc')->get());
+       //bloques ordenados por nombre ascendente
+       $bloques = BloqueResource::collection(Bloque::orderBy('nombre', 'asc')->get());
+       $proyectos = ProyectoResource::collection(Proyecto::orderBy('nombre', 'asc')->get());
        return inertia('Piezas/Create', [
-            'proveedores' => $proveedores,
+            'bloques' => $bloques,
+            'proyectos' => $proyectos,
        ]);
     }
 
@@ -34,20 +38,26 @@ class PiezaController extends Controller
         
         $data = $request->validated();
         $data['user_id'] = auth()->id();
+        //codigo de la pieza 001,002
+        $data['codigo'] = str_pad(Pieza::count() + 1, 3, '0', STR_PAD_LEFT);
         //creamos la pieza
         Pieza::create($data);
         return redirect()->route('piezas.index')->with('success', 'Pieza creada correctamente');
     }
 
     public function edit(Pieza $pieza){
-        //obtenemos los proveedores
-        $proveedores = ProveedorResource::collection(Proveedor::orderBy('nombre', 'asc')->get());
-        $pieza = PiezaResource::make($pieza->load('user', 'proveedor'));
+        //obtenemos los bloques
+        $bloques = BloqueResource::collection(Bloque::orderBy('nombre', 'asc')->get());
+        $proyectos = ProyectoResource::collection(Proyecto::orderBy('nombre', 'asc')->get());
+        $pieza = PiezaResource::make($pieza->load('user', 'bloque'));
         return inertia('Piezas/Edit', [
             'pieza' => $pieza,
-            'proveedores' => $proveedores,
+            'bloques' => $bloques,
+            'proyectos' => $proyectos,
         ]);
     }
+
+    
 
     public function update(UpdatePiezaRequest $request, Pieza $pieza){
         $pieza->update($request->validated());
@@ -55,9 +65,7 @@ class PiezaController extends Controller
     }
 
     public function destroy(Pieza $pieza){
-        //modal de confirmación
-        return inertia('Piezas/Delete', [
-            'pieza' => PiezaResource::make($pieza->load('user', 'proveedor')),
-        ]);        
+        $pieza->delete();
+        return redirect()->route('piezas.index')->with('success', 'Pieza eliminada correctamente');            
     }
 }

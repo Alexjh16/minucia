@@ -25,7 +25,7 @@ class UpdatePiezaRequest extends FormRequest
             'nombre' => 'required|string|max:255',
             'descripcion' => 'required|string|max:1000',
             'precio' => 'required|numeric|min:0',
-            'proveedor_id' => 'required|exists:proveedores,id',
+            'bloque_id' => 'required|exists:bloques,id',
             'cantidad' => 'required|integer|min:1',
             'codigo' => 'required|string|max:100',
             'marca' => 'required|string|max:255',
@@ -39,14 +39,14 @@ class UpdatePiezaRequest extends FormRequest
             'nombre.required' => 'El nombre de la pieza es obligatorio.',
             'descripcion.required' => 'La descripción de la pieza es obligatoria.',
             'precio.required' => 'El precio de la pieza es obligatorio.',
-            'proveedor_id.required' => 'El proveedor de la pieza es obligatorio.',
+            'bloque_id.required' => 'El bloque de la pieza es obligatorio.',
             'cantidad.required' => 'La cantidad de la pieza es obligatoria.',
             'codigo.required' => 'El código de la pieza es obligatorio.',
             'marca.required' => 'La marca de la pieza es obligatoria.',
             'codigo.unique' => 'El código de la pieza ya está en uso.',
             'precio.numeric' => 'El precio debe ser un número válido.',
             'cantidad.integer' => 'La cantidad debe ser un número entero.',
-            'proveedor_id.exists' => 'El proveedor seleccionado no es válido.',
+            'bloque_id.exists' => 'El bloque seleccionado no es válido.',
         ];
     }
 }

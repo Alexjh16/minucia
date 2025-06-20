@@ -22,31 +22,31 @@ class StorePiezaRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'required|string|max:1000',
-            'precio' => 'required|numeric|min:0',
-            'proveedor_id' => 'required|exists:proveedores,id',
-            'cantidad' => 'required|integer|min:1',
-            'codigo' => 'required|string|max:100|unique:piezas,codigo,' . $this->route('pieza'),
-            'marca' => 'required|string|max:255',
-            
+            'pieza' => 'required|string|max:255',
+            'peso_teorico' => 'required|decimal:1|min:0',
+            'peso_real' => 'nullable|decimal:1|min:0',
+            'estado' => 'required|string|max:255',
+            'bloque_id' => 'required|exists:bloques,id',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'nombre.required' => 'El nombre de la pieza es obligatorio.',
-            'descripcion.required' => 'La descripción de la pieza es obligatoria.',
-            'precio.required' => 'El precio de la pieza es obligatorio.',
-            'proveedor_id.required' => 'El proveedor de la pieza es obligatorio.',
-            'cantidad.required' => 'La cantidad de la pieza es obligatoria.',
-            'codigo.required' => 'El código de la pieza es obligatorio.',
-            'marca.required' => 'La marca de la pieza es obligatoria.',
-            'precio.numeric' => 'El precio debe ser un número valido.',
-            'cantidad.integer' => 'La cantidad debe ser un número entero.',
+            'pieza.required' => 'El nombre de la pieza es obligatorio.',
+            'peso_teorico.required' => 'El peso teórico de la pieza es obligatorio.',
+            'peso_real.required' => 'El peso real de la pieza es obligatorio.',
+            'estado.required' => 'El estado de la pieza es obligatorio.',
+            'bloque_id.required' => 'El bloque de la pieza es obligatorio.',
+            'user_id.required' => 'El usuario de la pieza es obligatorio.',
+            'pieza.string' => 'El nombre de la pieza debe ser una cadena de texto.',
+            'peso_teorico.float' => 'El peso teórico de la pieza debe ser un número.',
+            'peso_real.float' => 'El peso real de la pieza debe ser un número.',
+            'estado.string' => 'El estado de la pieza debe ser una cadena de texto.',
+            'bloque_id.exists' => 'El bloque seleccionado no es válido.',
+            'user_id.exists' => 'El usuario seleccionado no es válido.',
             'codigo.unique' => 'El código de la pieza ya existe.',
-            'proveedor_id.exists' => 'El proveedor seleccionado no es válido.',
+            'peso_teorico.decimal' => 'El peso teórico debe ser un número decimal con un decimal.',
         ];
     }
-}
+};

@@ -2,7 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProveedorController;
+use App\Http\Controllers\Api\BloqueController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,4 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::get('proveedores', ProveedorController::class);
+route::get('bloques', BloqueController::class);
+

@@ -10,30 +10,24 @@ class Pieza extends Model
     use HasFactory;
     protected $fillable = [
         'codigo',
-        'nombre',
-        'descripcion',
-        'precio',
-        'cantidad',
-        'marca',
-        'modelo',
-        'proveedor_id',
-        'proyecto_id',
+        'pieza',
+        'peso_teorico',
+        'peso_real',
+        'estado',
+        'bloque_id',
+        'user_id',
+        'bloque_id',
         'user_id',
     ];
     protected $casts = [
-        'cantidad' => 'integer',
+        'peso_teorico' => 'float',
+        'peso_real' => 'float',
     ];
 
     protected $with = [
-        'proveedor',
+        'bloque',
         'user',
     ];
-
-    //remover 
-    public function proveedor()
-    {
-        return $this->belongsTo(Proveedor::class);
-    }
 
     public function bloque(){
         return $this->belongsTo(Bloque::class);

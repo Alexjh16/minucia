@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ListProveedoresRequest extends FormRequest
+class ListBloquesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class ListProveedoresRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'proveedor_id' => ['required', 'exists:proveedores,id'],
+            'proyecto_id' => 'required|exists:proyectos,id',
         ];
     }
 }

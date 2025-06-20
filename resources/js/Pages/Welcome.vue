@@ -73,7 +73,7 @@ defineProps({
               <p
                 class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
                 Gestiona y registra todas las piezas de tu flota naval de manera eficiente.
-                Control de inventario, proveedores y especificaciones técnicas en una sola plataforma.
+                Control de inventario, bloques, proyectos y especificaciones técnicas en una sola plataforma.
               </p>
               <div class="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
                 <div class="rounded-md shadow">
@@ -121,7 +121,7 @@ defineProps({
               </div>
               <p class="ml-16 text-lg leading-6 font-medium text-gray-900">Registro Detallado</p>
               <p class="mt-2 ml-16 text-base text-gray-500">
-                Registra cada pieza con información completa: nombre, código, marca, proveedor, cantidad y precio.
+                Registra cada pieza con información completa: nombre, código, marca, bloques, cantidad y precio.
               </p>
             </div>
 

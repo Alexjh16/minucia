@@ -6,22 +6,37 @@ import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
     pieza: Object,
-    proveedores: Object
+    bloques: Object,
+    proyectos: Object,
 });
-
-
 
 let pieza = usePage().props.pieza.data;
 const form = useForm({
-    nombre: pieza.nombre,
-    codigo: pieza.codigo,
-    marca: pieza.marca,
-    proveedor_id: pieza.proveedor.id,
-    cantidad: pieza.cantidad,
-    precio: pieza.precio,
-    descripcion: pieza.descripcion,
+    pieza: pieza.pieza,
+    peso_teorico: pieza.peso_teorico,
+    peso_real: pieza.peso_real,
+    diferencia_peso: '0.00',
+    estado: pieza.estado,
+    proyecto_id: pieza.bloque.proyecto.id,
+    bloque_id: pieza.bloque.id,
+    fecha_registro: pieza.created_at,
+    creado_por: pieza.user.username
 });
 
+
+const formPesos = ref({
+    peso_teorico: '',
+    peso_real: '',
+    diferencia_peso: '',
+});
+
+const calcularDiferencia = () => {
+    if (formPesos.value.peso_teorico && formPesos.value.peso_real) {
+        const teorico = parseFloat(formPesos.value.peso_teorico);
+        const real = parseFloat(formPesos.value.peso_real);
+        formPesos.value.diferencia_peso = (real - teorico).toFixed(2);
+    }
+};
 
 const updatePieza = () => {
     form.put(route('piezas.update', pieza.id));
@@ -53,105 +68,108 @@ const updatePieza = () => {
 
                                 <div class="grid grid-cols-6 gap-6">
                                     <div class="col-span-6 sm:col-span-3">
-                                        <label for="nombre" class="block text-sm font-medium text-gray-700">Nombre</label>
+                                        <label for="pieza" class="block text-sm font-medium text-gray-700">Pieza</label>
                                         <input 
-                                        v-model="form.nombre"
-                                        autocomplete="nombre"
-                                        type="text" id="nombre"
+                                        v-model="form.pieza"
+                                        autocomplete="pieza"
+                                        type="text" id="pieza"
                                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
-                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.nombre }"
+                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.pieza }"
                                             />
 
-                                    <InputError :message="form.errors.nombre" class="mt-2" />
+                                    <InputError :message="form.errors.pieza" class="mt-2" />
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-3">
-                                        <label for="codigo" class="block text-sm font-medium text-gray-700">Código</label>
+                                        <label for="creado_por" class="block text-sm font-medium text-gray-700">Creado por</label>
                                         <input 
+                                        disabled
                                         placeholder="PZ-XXXX"
-                                        v-model="form.codigo"
-                                        type="text" id="codigo" autocomplete="codigo"
-                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm "
-                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.codigo }" />
+                                        v-model="form.creado_por"
+                                        type="text" id="creado_por" autocomplete="creado_por"
+                                            class="bg-gray-200 mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none  sm:text-sm "
+                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.creado_por }" />
 
-                                        <InputError :message="form.errors.codigo" class="mt-2" />
+                                        <InputError :message="form.errors.creado_por" class="mt-2" />
                                     </div>
 
                                     <div class="col-span-6 sm:col-span-3">
                                         <label
                                             for="marca"
                                             class="block text-sm font-medium text-gray-700"
-                                            >Marca</label
+                                            >Proyecto</label
                                         >
                                         <select
-                                            v-model="form.marca"
-                                            id="marca"
+                                            v-model="form.proyecto_id"
+                                            id="proyecto_id"
                                             class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.marca }"
+                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.proyecto_id }"
                                         >
                                             <option value="">
-                                                Seleccionar una Marca
+                                                Seleccionar un Proyecto
                                             </option>
-                                            <option value="Marca A">Marca A</option>
-                                            <option value="Marca B">Marca B</option>
-                                            <option value="Marca C">Marca C</option>
+                                            <option v-for="proyecto in proyectos.data" :key="proyecto.id" :value="proyecto.id">
+                                               {{ proyecto.codigo }} - {{ proyecto.nombre }}
+                                            </option>
                                         </select>
-                                        <InputError :message="form.errors.marca" class="mt-2" />
+                                        <InputError :message="form.errors.proyecto_id" class="mt-2" />
                                     </div>
 
                                     
 
                                     <div class="col-span-6 sm:col-span-3">
-                                        <label for="proveedor_id"
-                                            class="block text-sm font-medium text-gray-700">Proveedor</label>
-                                        <select id="proveedor_id"
-                                            v-model="form.proveedor_id"
+                                        <label for="bloque_id"
+                                            class="block text-sm font-medium text-gray-700">Bloque</label>
+                                        <select id="bloque_id"
+                                            v-model="form.bloque_id"
                                             class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.proveedor_id }">
+                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.bloque_id }">
                                             <option value="">
-                                                Selecciona un Proveedor
+                                                Selecciona un Bloque
                                             </option>
-                                            <option v-for="proveedor in props.proveedores.data" :key="proveedor.id" :value="proveedor.id">
-                                                {{ proveedor.nombre }}
+                                            <option v-for="bloque in props.bloques.data" :key="bloque.id" :value="bloque.id">
+                                                {{ bloque.nombre }}
                                             </option>
                                         </select>
-                                        <InputError :message="form.errors.proveedor_id" class="mt-2" />
+                                        <InputError :message="form.errors.bloque_id" class="mt-2" />
                                     </div>
 
-                                    <!-- cantidad -->
+                                    <!-- peso teórico -->
                                     <div class="col-span-6 sm:col-span-3">
-                                        <label for="cantidad" class="block text-sm font-medium text-gray-700">Cantidad</label>
-                                        <input 
-                                            type="number" id="cantidad" min="1"
+                                        <label for="peso_teorico" class="block text-sm font-medium text-gray-700">Peso teórico</label>
+                                        <input
+                                            type="float" id="peso_teorico" min="1"
                                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.cantidad }"
-                                            v-model="form.cantidad" />
+                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.peso_teorico }"
+                                            v-model="form.peso_teorico" />
 
-                                        <InputError :message="form.errors.cantidad" class="mt-2" />
+                                        <InputError :message="form.errors.peso_teorico" class="mt-2" />
                                     </div>
                                     
 
                                     <div class="col-span-6 sm:col-span-3">
-                                        <label for="precio" class="block text-sm font-medium text-gray-700">Precio</label>
+                                        <label for="peso_real" class="block text-sm font-medium text-gray-700">Peso real</label>
                                         <input
+                                        @input="calcularDiferencia()"
                                         placeholder="$0.00"
-                                         type="text" id="precio" autocomplete="precio"
+                                         type="float" id="peso_real" autocomplete="peso_real"
                                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                            v-model="form.precio" />
-                                        <InputError :message="form.errors.precio" class="mt-2" />
+                                            v-model="form.peso_real" />
+                                        <InputError :message="form.errors.peso_real" class="mt-2" />
                                     </div>
+
+
+                                    <!--input no editable para calcular la diferencia de peso teorico y peso real -->
                                     <div class="col-span-6 sm:col-span-3">
-                                        <label for="descripcion" class="block text-sm font-medium text-gray-700">Descripción</label>
-                                        <textarea id="descripcion" rows="3"
-                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.descripcion }"
-                                            v-model="form.descripcion"
-                                            @error="form.errors.descripcion = $message"></textarea>
-                                        <p class="mt-2 text-sm text-gray-500">
-                                            Proporcione una descripción detallada de la pieza.
-                                        </p>
-                                        <InputError :message="form.errors.descripcion" class="mt-2" />
+                                        <label for="diferencia_peso" class="block text-sm font-medium text-gray-700">Diferencia de peso</label>
+                                        <input
+                                            type="text" id="diferencia_peso" disabled
+                                            class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none bg-gray-200 sm:text-sm"
+                                            :class="{' focus:ring-red-500 focus:border-red-500 border-red-300': form.errors.diferencia_peso }"
+                                            v-model="form.diferencia_peso" />
+                                        <InputError :message="form.errors.diferencia_peso" class="mt-2" />
                                     </div>
+
                                 </div>
                             </div>
                             <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">

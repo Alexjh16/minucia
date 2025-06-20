@@ -25,7 +25,7 @@ class PiezaFactory extends Factory
             'cantidad' => $this->faker->numberBetween(1, 100),
             'marca' => $this->faker->company,
             'modelo' => $this->faker->word,
-            'proveedor_id' => \App\Models\Proveedor::factory()->create()->id,
+            'bloque_id' => \App\Models\Bloque::factory()->create()->id,
             'user_id' => \App\Models\User::factory()->create()->id,
             'created_at' => now(),
             'updated_at' => now(),
