@@ -36,9 +36,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::resource('piezas', PiezaController::class);
-    //metodo llamado changeState en el controlador PiezaController
-    Route::get('/piezas/changeState', [PiezaController::class, 'changeState'])->name('piezas.changeState');
+    // Rutas resource estándar
+    Route::get('/piezas', [PiezaController::class, 'index'])->name('piezas.index');
+    Route::get('/piezas/create', [PiezaController::class, 'create'])->name('piezas.create');
+    Route::post('/piezas', [PiezaController::class, 'store'])->name('piezas.store');
+    Route::get('/piezas/{pieza}/edit', [PiezaController::class, 'edit'])->name('piezas.edit');
+    Route::put('/piezas/{pieza}', [PiezaController::class, 'update'])->name('piezas.update');
+    Route::delete('/piezas/{pieza}', [PiezaController::class, 'destroy'])->name('piezas.destroy');
+
+    // Métodos personalizados
+    Route::get('/piezas/graficos', [PiezaController::class, 'graficos'])->name('piezas.graficos');
+    Route::get('/piezas/change-state', [PiezaController::class, 'changeState'])->name('piezas.changeState');
+
+    //ruta para los graficos
     Route::resource('proyectos', ProyectoController::class);
     Route::resource('bloques', BloqueController::class);
 });

@@ -71,11 +71,31 @@ class PiezaController extends Controller
     }
 
     //mostrar todas las piezas para cambiar el estado
-    public function show(){
+    /*public function show(){
         return inertia('Piezas/ChangeState', [
             'piezas' => PiezaResource::collection(Pieza::all()),
             'bloques' => BloqueResource::collection(Bloque::all()),
             'proyectos' => ProyectoResource::collection(Proyecto::all()),
         ]);
+    }*/
+
+    public function ChangeState(){
+        return inertia('Piezas/ChangeState', [
+            'piezas' => PiezaResource::collection(Pieza::all()),
+            'bloques' => BloqueResource::collection(Bloque::all()),
+            'proyectos' => ProyectoResource::collection(Proyecto::all()),
+        ]);
+    }
+
+    //graficos de piezas
+    public function graficos(){
+        $piezas = PiezaResource::collection(Pieza::all());
+        $bloques = BloqueResource::collection(Bloque::all());
+        $proyectos = ProyectoResource::collection(Proyecto::all());
+        return inertia('Piezas/Graficos', [
+            'piezas' => $piezas,
+            'bloques' => $bloques,
+            'proyectos' => $proyectos,
+        ]); 
     }
 }
