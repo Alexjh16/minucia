@@ -20,6 +20,10 @@ const form = useForm({
 });
 
 watch(() => form.proyecto_id, (newValue) => {
+    if (!newValue) {
+        bloques.value = [];
+        return;
+    }
    getBloques(newValue);
 });
 
@@ -28,6 +32,10 @@ const getBloques = (proyectoId) => {
         .then((response) => {
             bloques.value = response.data;
         })
+        .catch((error) => {
+            console.error('Error fetching bloques:', error);
+            bloques.value = [];
+        });
 }
 const createPieza = () => {
     form.post(route('piezas.store'));

@@ -26,6 +26,7 @@ class StorePiezaRequest extends FormRequest
             'peso_teorico' => 'required|decimal:1|min:0',
             'peso_real' => 'nullable|decimal:1|min:0',
             'estado' => 'required|string|max:255',
+            'proyecto_id' => 'required|exists:proyectos,id',
             'bloque_id' => 'required|exists:bloques,id',
         ];
     }
@@ -47,6 +48,8 @@ class StorePiezaRequest extends FormRequest
             'user_id.exists' => 'El usuario seleccionado no es válido.',
             'codigo.unique' => 'El código de la pieza ya existe.',
             'peso_teorico.decimal' => 'El peso teórico debe ser un número decimal con un decimal.',
+            'proyecto_id.required' => 'El proyecto de la pieza es obligatorio.',
+            'proyecto_id.exists' => 'El proyecto seleccionado no es válido.',
         ];
     }
 };

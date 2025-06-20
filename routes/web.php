@@ -37,6 +37,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('piezas', PiezaController::class);
+    //metodo llamado changeState en el controlador PiezaController
+    Route::get('/piezas/changeState', [PiezaController::class, 'changeState'])->name('piezas.changeState');
     Route::resource('proyectos', ProyectoController::class);
     Route::resource('bloques', BloqueController::class);
 });

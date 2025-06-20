@@ -11,7 +11,7 @@ import { Head, Link, router } from '@inertiajs/vue3';
 const props = defineProps({
     piezas: Object
 });
-console.log(props.piezas);
+
 function formatFecha(fecha) {
     if (!fecha) return '';
     const d = new Date(fecha);
@@ -32,6 +32,11 @@ const destroyPieza = async (id) => {
             });
     }
 };
+
+//redireccionar a la página de cambio de estado
+const changeState = async() => {
+    router.visit(route('piezas.changeState'));
+}
 </script>
 <template>
 
@@ -58,11 +63,11 @@ const destroyPieza = async (id) => {
                                 class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto">
                             Agregar Pieza
                             </Link>
-                            <!--cambiar estados de las piezas-->
-                            <Link :href="route('piezas.edit', { pieza: []})"
+                            <!--mostrar boton si hay al menos 1 registro en piezas-->
+                            <button v-if="piezas.data.length > 0" @click="changeState"
                                 class="ml-4 inline-flex items-center justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 sm:w-auto">
                             Cambiar Estado de Piezas
-                            </Link>
+                            </button>
                         </div>
                     </div>
 
@@ -152,7 +157,7 @@ const destroyPieza = async (id) => {
                                                 </td>
                                                 <td :class="[
                                                     'whitespace-nowrap px-3 py-4 text-sm font-medium',
-                                                     pieza.peso_real === 'pendiente'
+                                                     pieza.estado === 'Fabricado'
                                                         ? ' text-green-400'
                                                         : 'text-orange-400'
                                                 ]">
@@ -161,7 +166,7 @@ const destroyPieza = async (id) => {
                                                 </td>
                                                 <td :class="[
                                                     'text-sm font-medium',
-                                                    pieza.estado === 'pendiente'
+                                                    pieza.estado === 'Fabricado'
                                                         ? ' text-green-400'
                                                         : 'text-orange-400'
                                                 ]">
@@ -181,7 +186,7 @@ const destroyPieza = async (id) => {
                                                     {{ pieza.user.username }}
                                                 </td>
                                                 <td
-                                                    class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 flex justify-end space-x-4">
+                                                    class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 flex justify-start space-x-4">
                                                     <Link :href="route('piezas.edit', pieza.id)"
                                                         class="text-indigo-600 hover:text-indigo-900">
                                                     <EditIcon />

@@ -57,15 +57,25 @@ class PiezaController extends Controller
         ]);
     }
 
-    
-
     public function update(UpdatePiezaRequest $request, Pieza $pieza){
         $pieza->update($request->validated());
+        //cambiar a estado fabricacdo
+        $pieza->estado = 'Fabricado';
+        $pieza->save();
         return redirect()->route('piezas.index')->with('success', 'Pieza actualizada correctamente'); //actualizamos la pieza
     }
 
     public function destroy(Pieza $pieza){
         $pieza->delete();
         return redirect()->route('piezas.index')->with('success', 'Pieza eliminada correctamente');            
+    }
+
+    //mostrar todas las piezas para cambiar el estado
+    public function show(){
+        return inertia('Piezas/ChangeState', [
+            'piezas' => PiezaResource::collection(Pieza::all()),
+            'bloques' => BloqueResource::collection(Bloque::all()),
+            'proyectos' => ProyectoResource::collection(Proyecto::all()),
+        ]);
     }
 }
