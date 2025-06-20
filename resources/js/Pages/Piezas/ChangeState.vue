@@ -229,7 +229,7 @@ const updateStatePieza = () => {
                                         <InputError :message="form.errors.diferencia_peso" class="mt-2" />
                                     </div>
                                     <!--error o errores que puede retonar el servidor-->
-                                    <InputError :message="form.errors" class="mt-2" />
+                                    <!--<InputError :message="form.errors" class="mt-2" />-->
                                 </div>
                             </div>
                             <div class="px-4 py-3  bg-gray-50 text-right sm:px-6">
